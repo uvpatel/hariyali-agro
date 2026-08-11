@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import NoiseBackgroundDemo from "./hero-button";
+import HeroButton from "./hero-button";
 
 export default function Hero() {
   return (
@@ -13,6 +15,7 @@ export default function Hero() {
         <p className="relative z-10 mx-auto mt-4 max-w-xl text-center text-neutral-800 dark:text-neutral-500">
           We are a leading provider of high-quality fertilizers and agricultural products, dedicated to supporting farmers and promoting sustainable farming practices. Our mission is to enhance crop yields and improve the livelihoods of farmers through innovative solutions and exceptional customer service.
         </p>
+        <HeroButton />
       </div>
     </div>
   );
