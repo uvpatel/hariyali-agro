@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/sidebar"
 import { CirclePlusIcon, MailIcon } from "lucide-react"
 import { ModeToggle } from "./toggler"
+import Link from "next/link"
+
 
 export function NavMain({
   items,
@@ -49,7 +51,9 @@ export function NavMain({
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title}>
                 {item.icon}
-                <span>{item.title}</span>
+                <Link href={item.url}>
+                  <span>{item.title}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

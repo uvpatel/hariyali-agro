@@ -20,18 +20,23 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { SignOutButton, UserAvatar, UserButton, useUser } from "@clerk/react"
 import { EllipsisVerticalIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon, LogOutIcon } from "lucide-react"
+import Link from "next/link"
 
 export function NavUser({
-  user,
+  username,
 }: {
-  user: {
+  username: {
     name: string
     email: string
     avatar: string
   }
 }) {
   const { isMobile } = useSidebar()
+
+  const { isLoaded, isSignedIn, user } = useUser();
+  
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -41,14 +46,15 @@ export function NavUser({
               <SidebarMenuButton size="lg" className="aria-expanded:bg-muted" />
             }
           >
-            <Avatar className="size-8 rounded-lg grayscale">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+            <Avatar className="size-6 rounded-lg grayscale">
+             <UserButton />
+              {/* <AvatarFallback className="rounded-lg">CN</AvatarFallback> */}
+           
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
+              <span className="truncate font-medium">{user?.firstName}</span>
               <span className="truncate text-xs text-foreground/70">
-                {user.email}
+                {user?.primaryEmailAddress?.emailAddress}
               </span>
             </div>
             <EllipsisVerticalIcon className="ml-auto size-4" />
@@ -63,13 +69,13 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="size-8">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                    <AvatarImage src={user?.imageUrl} alt={username.name} />
+                    <AvatarFallback className="rounded-lg">{user?.firstName?.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
+                    <span className="truncate font-medium">{user?.firstName}</span>
                     <span className="truncate text-xs text-muted-foreground">
-                      {user.email}
+                      {user?.primaryEmailAddress?.emailAddress}
                     </span>
                   </div>
                 </div>
@@ -80,24 +86,24 @@ export function NavUser({
               <DropdownMenuItem>
                 <CircleUserRoundIcon
                 />
-                Account
+               <Link href="/user-profile"> Account</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCardIcon
                 />
-                Billing
+                <Link href="/pricing"> Billing</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <BellIcon
                 />
-                Notifications
+                <Link href="/notifications"> Notifications</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOutIcon
               />
-              Log out
+              <SignOutButton />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -15,7 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon, Settings2Icon, CircleHelpIcon, SearchIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, CommandIcon, ShoppingCart, Package } from "lucide-react"
+import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, CameraIcon, FileTextIcon, Settings2Icon, CircleHelpIcon, SearchIcon, DatabaseIcon, FileChartColumnIcon, FileIcon, CommandIcon, ShoppingCart, Package, FileText } from "lucide-react"
 
 const data = {
   user: {
@@ -26,7 +26,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: (
         <LayoutDashboardIcon
         />
@@ -42,27 +42,19 @@ const data = {
     },
     {
       title: "Inventory",
-      url: "#",
+      url: "/inventory",
       icon: (
         <Package />
       ),
     },
     {
-      title: "Projects",
-      url: "#",
+      title: "Invoices",
+      url: "/invoices",
       icon: (
-        <FolderIcon
-        />
+        <FileText />
       ),
     },
-    {
-      title: "Team",
-      url: "#",
-      icon: (
-        <UsersIcon
-        />
-      ),
-    },
+    
   ],
   navClouds: [
     {
@@ -108,7 +100,7 @@ const data = {
         <FileTextIcon
         />
       ),
-      url: "#",
+      url: "/prompts",
       items: [
         {
           title: "Active Proposals",
@@ -124,7 +116,7 @@ const data = {
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: (
         <Settings2Icon
         />
@@ -132,7 +124,7 @@ const data = {
     },
     {
       title: "Get Help",
-      url: "#",
+      url: "/help",
       icon: (
         <CircleHelpIcon
         />
@@ -140,7 +132,7 @@ const data = {
     },
     {
       title: "Search",
-      url: "#",
+      url: "/search",
       icon: (
         <SearchIcon
         />
@@ -150,7 +142,7 @@ const data = {
   documents: [
     {
       name: "Data Library",
-      url: "#",
+      url: "/data-library",
       icon: (
         <DatabaseIcon
         />
@@ -158,7 +150,7 @@ const data = {
     },
     {
       name: "Reports",
-      url: "#",
+      url: "/reports",
       icon: (
         <FileChartColumnIcon
         />
@@ -166,7 +158,7 @@ const data = {
     },
     {
       name: "Word Assistant",
-      url: "#",
+      url: "/word-assistant",
       icon: (
         <FileIcon
         />
@@ -196,7 +188,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser username={data.user} />
       </SidebarFooter>
     </Sidebar>
   )
