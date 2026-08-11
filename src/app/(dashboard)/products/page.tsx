@@ -3,18 +3,18 @@
 import { useState } from "react"
 import Image from "next/image"
 import {
+  Check,
   Heart,
   Minus,
   Plus,
-  ShoppingBag,
+  ShieldCheck,
+  ShoppingCart,
   Star,
   Truck,
-  RotateCcw,
-  ShieldCheck,
 } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
   Accordion,
@@ -23,45 +23,88 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-const productImages = [
-  "/products/product-1.jpg",
-  "/products/product-2.jpg",
-  "/products/product-3.jpg",
-  "/products/product-4.jpg",
-]
+const product = {
+  name: "Premium Hybrid Tomato Seeds",
+  category: "Vegetable Seeds",
+  brand: "AgroGrow",
+  rating: 4.8,
+  reviews: 126,
+  description:
+    "High-quality hybrid tomato seeds developed for strong plant growth, uniform fruits and reliable yield.",
 
-const sizes = ["S", "M", "L", "XL"]
+  images: [
+    "/products/tomato-seeds-1.png",
+    "/products/tomato-seeds-2.png",
+    "/products/tomato-seeds-3.png",
+  ],
 
-export default function ProductPage() {
-  const [selectedImage, setSelectedImage] = useState(productImages[0])
-  const [selectedSize, setSelectedSize] = useState("M")
+  variants: [
+    {
+      id: 1,
+      size: "10g",
+      price: 249,
+      originalPrice: 299,
+    },
+    {
+      id: 2,
+      size: "25g",
+      price: 499,
+      originalPrice: 599,
+    },
+    {
+      id: 3,
+      size: "50g",
+      price: 899,
+      originalPrice: 1099,
+    },
+  ],
+
+  specifications: [
+    ["Crop", "Tomato"],
+    ["Seed Type", "Hybrid"],
+    ["Germination", "85%+"],
+    ["Sowing Season", "Kharif / Rabi"],
+    ["Harvest", "70–80 Days"],
+    ["Country", "India"],
+  ],
+}
+
+export default function AgroProductPage() {
+  const [image, setImage] = useState(product.images[0])
+  const [variant, setVariant] = useState(product.variants[1])
   const [quantity, setQuantity] = useState(1)
 
-  const increaseQuantity = () => {
-    setQuantity((prev) => prev + 1)
-  }
-
-  const decreaseQuantity = () => {
-    setQuantity((prev) => Math.max(1, prev - 1))
-  }
+  const discount = Math.round(
+    ((variant.originalPrice - variant.price) /
+      variant.originalPrice) *
+      100
+  )
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-14">
+      <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 lg:py-12">
+
+        {/* Breadcrumb */}
+        <div className="mb-8 text-sm text-muted-foreground">
+          Home / Seeds / Vegetable Seeds / {product.name}
+        </div>
+
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          {/* Product Gallery */}
-          <div className="space-y-4">
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
+
+          {/* ================= PRODUCT IMAGES ================= */}
+
+          <section>
+            <div className="relative aspect-square overflow-hidden rounded-2xl border bg-muted">
               <Image
-                src={selectedImage}
-                alt="Product image"
+                src={image}
+                alt={product.name}
                 fill
                 priority
-                className="object-cover transition-transform duration-500 hover:scale-105"
+                className="object-contain p-8"
               />
 
               <Badge className="absolute left-4 top-4">
-                Bestseller
+                {discount}% OFF
               </Badge>
 
               <Button
@@ -73,237 +116,316 @@ export default function ProductPage() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-4 gap-3">
-              {productImages.map((image) => (
+            {/* thumbnails */}
+
+            <div className="mt-4 grid grid-cols-4 gap-3">
+              {product.images.map((item) => (
                 <button
-                  key={image}
-                  onClick={() => setSelectedImage(image)}
-                  className={`relative aspect-square overflow-hidden rounded-xl border transition ${
-                    selectedImage === image
-                      ? "border-foreground"
-                      : "border-border hover:border-foreground/50"
+                  key={item}
+                  onClick={() => setImage(item)}
+                  className={`relative aspect-square overflow-hidden rounded-xl border ${
+                    image === item
+                      ? "border-primary"
+                      : "border-border"
                   }`}
                 >
                   <Image
-                    src={image}
-                    alt="Product thumbnail"
+                    src={item}
+                    alt={product.name}
                     fill
-                    className="object-cover"
+                    className="object-contain p-2"
                   />
                 </button>
               ))}
             </div>
-          </div>
+          </section>
 
-          {/* Product Information */}
-          <div className="flex flex-col">
-            <div className="space-y-5">
-              <div>
-                <p className="mb-2 text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                  Premium Collection
+          {/* ================= PRODUCT INFO ================= */}
+
+          <section>
+            <Badge variant="secondary">
+              {product.category}
+            </Badge>
+
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+              {product.name}
+            </h1>
+
+            <p className="mt-2 text-sm text-muted-foreground">
+              By {product.brand}
+            </p>
+
+            {/* Rating */}
+
+            <div className="mt-4 flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <Star className="size-4 fill-current" />
+                <span className="font-medium">
+                  {product.rating}
+                </span>
+              </div>
+
+              <span className="text-sm text-muted-foreground">
+                ({product.reviews} verified reviews)
+              </span>
+            </div>
+
+            {/* Price */}
+
+            <div className="mt-6 flex items-end gap-3">
+              <span className="text-3xl font-semibold">
+                ₹{variant.price}
+              </span>
+
+              <span className="text-lg text-muted-foreground line-through">
+                ₹{variant.originalPrice}
+              </span>
+
+              <span className="text-sm font-medium text-green-600">
+                {discount}% OFF
+              </span>
+            </div>
+
+            <p className="mt-1 text-xs text-muted-foreground">
+              Inclusive of all taxes
+            </p>
+
+            <p className="mt-6 leading-7 text-muted-foreground">
+              {product.description}
+            </p>
+
+            <Separator className="my-6" />
+
+            {/* ================= PACK SIZE ================= */}
+
+            <div>
+              <div className="mb-3 flex items-center justify-between">
+                <p className="font-medium">
+                  Select Pack Size
                 </p>
 
-                <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                  Essential Oversized T-Shirt
-                </h1>
-              </div>
-
-              {/* Rating */}
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-0.5">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className="size-4 fill-foreground text-foreground"
-                    />
-                  ))}
-                </div>
-
                 <span className="text-sm text-muted-foreground">
-                  4.9 (128 reviews)
+                  Available in 3 sizes
                 </span>
               </div>
 
-              {/* Price */}
-              <div className="flex items-center gap-3">
-                <span className="text-3xl font-semibold">₹1,499</span>
+              <div className="grid grid-cols-3 gap-3">
+                {product.variants.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setVariant(item)}
+                    className={`rounded-xl border p-4 text-left transition ${
+                      variant.id === item.id
+                        ? "border-primary bg-primary/5"
+                        : "hover:border-primary/50"
+                    }`}
+                  >
+                    <p className="font-medium">
+                      {item.size}
+                    </p>
 
-                <span className="text-lg text-muted-foreground line-through">
-                  ₹1,999
-                </span>
-
-                <Badge variant="secondary">25% OFF</Badge>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      ₹{item.price}
+                    </p>
+                  </button>
+                ))}
               </div>
+            </div>
 
-              <p className="leading-7 text-muted-foreground">
-                A premium everyday essential made from soft, heavyweight cotton.
-                Designed with a relaxed oversized fit for effortless comfort and
-                modern styling.
+            {/* Stock */}
+
+            <div className="mt-6 flex items-center gap-2 text-sm">
+              <Check className="size-4 text-green-600" />
+
+              <span className="font-medium text-green-600">
+                In Stock
+              </span>
+
+              <span className="text-muted-foreground">
+                • Ready to dispatch
+              </span>
+            </div>
+
+            {/* Quantity */}
+
+            <div className="mt-6">
+              <p className="mb-3 font-medium">
+                Quantity
               </p>
 
-              <Separator />
-
-              {/* Size */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">Select size</span>
-
-                  <button className="text-sm text-muted-foreground underline underline-offset-4">
-                    Size guide
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-4 gap-3">
-                  {sizes.map((size) => (
-                    <Button
-                      key={size}
-                      variant={
-                        selectedSize === size ? "default" : "outline"
-                      }
-                      onClick={() => setSelectedSize(size)}
-                      className="h-11"
-                    >
-                      {size}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quantity */}
-              <div className="space-y-3">
-                <span className="font-medium">Quantity</span>
-
-                <div className="flex w-fit items-center rounded-lg border">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={decreaseQuantity}
-                    disabled={quantity === 1}
-                  >
-                    <Minus className="size-4" />
-                  </Button>
-
-                  <span className="w-10 text-center text-sm font-medium">
-                    {quantity}
-                  </span>
-
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={increaseQuantity}
-                  >
-                    <Plus className="size-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="flex w-fit items-center rounded-lg border">
                 <Button
-                  size="lg"
-                  variant="outline"
-                  className="h-12"
+                  variant="ghost"
+                  size="icon"
+                  disabled={quantity === 1}
+                  onClick={() =>
+                    setQuantity((value) =>
+                      Math.max(1, value - 1)
+                    )
+                  }
                 >
-                  <ShoppingBag className="mr-2 size-4" />
-                  Add to cart
+                  <Minus className="size-4" />
                 </Button>
 
+                <span className="w-12 text-center font-medium">
+                  {quantity}
+                </span>
+
                 <Button
-                  size="lg"
-                  className="h-12"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() =>
+                    setQuantity((value) => value + 1)
+                  }
                 >
-                  Buy now
+                  <Plus className="size-4" />
                 </Button>
               </div>
+            </div>
 
-              {/* Benefits */}
-              <div className="grid gap-3 rounded-xl border p-4">
-                <div className="flex items-center gap-3">
-                  <Truck className="size-5 text-muted-foreground" />
+            {/* ================= CTA ================= */}
 
-                  <div>
-                    <p className="text-sm font-medium">Free delivery</p>
-                    <p className="text-xs text-muted-foreground">
-                      On orders above ₹999
-                    </p>
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="flex items-center gap-3">
-                  <RotateCcw className="size-5 text-muted-foreground" />
-
-                  <div>
-                    <p className="text-sm font-medium">7-day returns</p>
-                    <p className="text-xs text-muted-foreground">
-                      Easy and hassle-free returns
-                    </p>
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="flex items-center gap-3">
-                  <ShieldCheck className="size-5 text-muted-foreground" />
-
-                  <div>
-                    <p className="text-sm font-medium">Secure checkout</p>
-                    <p className="text-xs text-muted-foreground">
-                      Protected and encrypted payments
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Product Details */}
-              <Accordion
-                type="single"
-                collapsible
-                className="w-full"
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <Button
+                variant="outline"
+                size="lg"
+                className="h-12"
               >
-                <AccordionItem value="details">
-                  <AccordionTrigger>
-                    Product details
-                  </AccordionTrigger>
+                <ShoppingCart className="mr-2 size-4" />
+                Add to Cart
+              </Button>
 
-                  <AccordionContent>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>• 100% premium cotton</li>
-                      <li>• Heavyweight 240 GSM fabric</li>
-                      <li>• Oversized relaxed fit</li>
-                      <li>• Ribbed crew neckline</li>
-                      <li>• Machine washable</li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
+              <Button
+                size="lg"
+                className="h-12"
+              >
+                Buy Now
+              </Button>
+            </div>
 
-                <AccordionItem value="shipping">
-                  <AccordionTrigger>
-                    Shipping & returns
-                  </AccordionTrigger>
+            {/* ================= BENEFITS ================= */}
 
-                  <AccordionContent className="leading-6 text-muted-foreground">
-                    Orders are usually dispatched within 1–2 business days.
-                    Standard delivery takes approximately 3–7 days depending on
-                    your location.
-                  </AccordionContent>
-                </AccordionItem>
+            <div className="mt-6 grid gap-4 rounded-xl border p-5 sm:grid-cols-3">
 
-                <AccordionItem value="care">
-                  <AccordionTrigger>
-                    Care instructions
-                  </AccordionTrigger>
+              <div>
+                <Truck className="mb-2 size-5" />
+                <p className="text-sm font-medium">
+                  Fast Delivery
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Across India
+                </p>
+              </div>
 
-                  <AccordionContent className="leading-6 text-muted-foreground">
-                    Machine wash cold with similar colors. Do not bleach.
-                    Tumble dry on low heat or air dry for best results.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <div>
+                <ShieldCheck className="mb-2 size-5" />
+                <p className="text-sm font-medium">
+                  Quality Assured
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Verified products
+                </p>
+              </div>
+
+              <div>
+                <Check className="mb-2 size-5" />
+                <p className="text-sm font-medium">
+                  Genuine Product
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Trusted brands
+                </p>
+              </div>
+            </div>
+
+          </section>
+        </div>
+
+        {/* ================= DETAILS ================= */}
+
+        <section className="mt-16 grid gap-12 lg:grid-cols-[1.5fr_1fr]">
+
+          <div>
+            <h2 className="text-2xl font-semibold">
+              Product Information
+            </h2>
+
+            <Accordion
+              type="single"
+              collapsible
+              defaultValue="description"
+              className="mt-5"
+            >
+              <AccordionItem value="description">
+                <AccordionTrigger>
+                  Description
+                </AccordionTrigger>
+
+                <AccordionContent className="leading-7 text-muted-foreground">
+                  Premium hybrid tomato seeds suitable for commercial
+                  and household cultivation. Designed for strong
+                  germination, healthy plant development and consistent
+                  fruit production.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="usage">
+                <AccordionTrigger>
+                  How to Use
+                </AccordionTrigger>
+
+                <AccordionContent className="space-y-2 text-muted-foreground">
+                  <p>1. Prepare a well-drained nursery bed.</p>
+                  <p>2. Sow seeds approximately 0.5–1 cm deep.</p>
+                  <p>3. Maintain adequate moisture.</p>
+                  <p>4. Transplant healthy seedlings after establishment.</p>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="shipping">
+                <AccordionTrigger>
+                  Shipping Information
+                </AccordionTrigger>
+
+                <AccordionContent className="text-muted-foreground">
+                  Orders are generally dispatched within 1–2 business
+                  days. Delivery times depend on the shipping location.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+
+          {/* Specifications */}
+
+          <div>
+            <h2 className="text-2xl font-semibold">
+              Specifications
+            </h2>
+
+            <div className="mt-5 overflow-hidden rounded-xl border">
+              {product.specifications.map(
+                ([label, value], index) => (
+                  <div
+                    key={label}
+                    className={`grid grid-cols-2 gap-4 p-4 text-sm ${
+                      index !== product.specifications.length - 1
+                        ? "border-b"
+                        : ""
+                    }`}
+                  >
+                    <span className="text-muted-foreground">
+                      {label}
+                    </span>
+
+                    <span className="font-medium">
+                      {value}
+                    </span>
+                  </div>
+                )
+              )}
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </main>
   )

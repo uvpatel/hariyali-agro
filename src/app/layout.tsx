@@ -40,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               
            
            <TooltipProvider>
-            <header className="flex justify-end items-center p-4 gap-4 h-16">
+           
             <Show when="signed-out">
               <SignInButton />
               <SignUpButton>
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </SignUpButton>
             </Show>
             
-          </header>
+   
             {children}</TooltipProvider>
              </InvoiceProvider>
                </ClerkProvider>
