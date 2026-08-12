@@ -2,7 +2,7 @@ import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { users } from "@/db/schema/user.schema";
+import { users } from "@/db/schema/users/user.schema";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
